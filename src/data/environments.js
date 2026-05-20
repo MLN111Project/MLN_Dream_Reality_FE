@@ -1,0 +1,80 @@
+import {
+  FaBuilding,
+  FaLightbulb,
+  FaHandsHelping,
+  FaLaptop,
+  FaLandmark,
+} from 'react-icons/fa';
+
+export const environments = [
+  {
+    id: 'corporate',
+    title: 'Corporate Company',
+    description: 'Stable salary, rigid hierarchy, limited creative freedom',
+    icon: FaBuilding,
+    color: '#64748b',
+    modifiers: {
+      salary: 85,
+      creativity: 35,
+      freedom: 25,
+      mentalHealth: 40,
+      recognition: 45,
+    },
+  },
+  {
+    id: 'startup',
+    title: 'Startup',
+    description: 'Fast pace, equity dreams, burnout culture',
+    icon: FaLightbulb,
+    color: '#f97316',
+    modifiers: {
+      salary: 55,
+      creativity: 70,
+      freedom: 65,
+      mentalHealth: 35,
+      recognition: 50,
+    },
+  },
+  {
+    id: 'ngo',
+    title: 'NGO',
+    description: 'Meaningful work, underfunded, emotional labor',
+    icon: FaHandsHelping,
+    color: '#10b981',
+    modifiers: {
+      salary: 30,
+      creativity: 60,
+      freedom: 55,
+      mentalHealth: 50,
+      recognition: 70,
+    },
+  },
+  {
+    id: 'freelance',
+    title: 'Freelance',
+    description: 'Freedom and instability in equal measure',
+    icon: FaLaptop,
+    color: '#06b6d4',
+    modifiers: {
+      salary: 45,
+      creativity: 85,
+      freedom: 90,
+      mentalHealth: 55,
+      recognition: 40,
+    },
+  },
+  {
+    id: 'government',
+    title: 'Government Institution',
+    description: 'Job security, bureaucracy, slow innovation',
+    icon: FaLandmark,
+    color: '#8b5cf6',
+    modifiers: {
+      salary: 60,
+      creativity: 30,
+      freedom: 20,
+      mentalHealth: 55,
+      recognition: 35,
+    },
+  },
+];

@@ -1,0 +1,35 @@
+.work-env {
+  position: relative;
+  z-index: 1;
+  padding-bottom: 4rem;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.work-env__header {
+  text-align: center;
+  margin-bottom: 2.5rem;
+  position: relative;
+}
+
+.work-env__header .back-btn {
+  position: absolute;
+  left: 0;
+  top: 0;
+  color: var(--text-muted) !important;
+}
+
+.work-env__title {
+  font-size: clamp(2rem, 5vw, 3rem);
+  margin-bottom: 1rem;
+}
+
+.work-env__subtitle {
+  margin: 0 auto;
+}
+
+.work-env__footer {
+  display: flex;
+  justify-content: center;
+  margin-top: 3rem;
+}

@@ -1,0 +1,43 @@
+.env-card {
+  padding: 1.5rem;
+  text-align: left;
+  cursor: pointer;
+  border: 1px solid var(--glass-border);
+  width: 100%;
+  color: inherit;
+  font-family: inherit;
+}
+
+.env-card--selected {
+  border-color: var(--env-color);
+  box-shadow: 0 0 40px color-mix(in srgb, var(--env-color) 35%, transparent);
+}
+
+.env-card__header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.env-card__header h3 {
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.env-card__desc {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  margin-bottom: 1.25rem;
+  line-height: 1.5;
+}
+
+.env-card__stats {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.env-card__stat .stat-label {
+  font-size: 0.65rem;
+}

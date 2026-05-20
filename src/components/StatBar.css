@@ -1,0 +1,24 @@
+.stat-bar {
+  margin-bottom: 1.25rem;
+}
+
+.stat-bar__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.35rem;
+}
+
+.stat-bar__value {
+  font-weight: 700;
+  font-size: 1.1rem;
+  text-shadow: 0 0 20px currentColor;
+}
+
+.stat-bar--warning .stat-bar__value {
+  color: var(--warning-red) !important;
+}
+
+.stat-bar__progress .ant-progress-bg {
+  box-shadow: 0 0 12px currentColor;
+}

@@ -1,0 +1,75 @@
+.mood--stress .page-container {
+  animation: mood-shake 4s ease-in-out infinite;
+}
+
+.mood--stress-critical .page-container {
+  animation: mood-shake-intense 2.5s ease-in-out infinite;
+}
+
+.mood--stress-critical .glass-card {
+  border-color: rgba(239, 68, 68, 0.25);
+}
+
+.mood--stress .timeline-page__indicators,
+.mood--stress-critical .timeline-page__indicators {
+  box-shadow: 0 0 30px rgba(239, 68, 68, 0.2) !important;
+}
+
+.mood--suppressed .page-container {
+  filter: saturate(0.45);
+  transition: filter 1s ease;
+}
+
+.mood--suppressed-critical .page-container {
+  filter: saturate(0.15) brightness(0.85);
+}
+
+.mood--suppressed .landing__card,
+.mood--suppressed .glass-card,
+.mood--suppressed-critical .glass-card {
+  transition: filter 0.8s, opacity 0.8s;
+}
+
+.mood--suppressed-critical .glass-card:not(.decision-modal *) {
+  opacity: 0.75;
+}
+
+.mood--low-health .animated-bg__orb--1 {
+  background: radial-gradient(circle, rgba(239, 68, 68, 0.25) 0%, transparent 70%) !important;
+}
+
+.mood-overlay {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  transition: opacity 0.8s;
+}
+
+.mood-overlay--stress {
+  background: radial-gradient(ellipse at center, transparent 40%, rgba(127, 29, 29, 0.15) 100%);
+  opacity: 1;
+}
+
+.mood-overlay--blur {
+  backdrop-filter: blur(0px);
+  transition: backdrop-filter 1s;
+}
+
+.mood--stress-critical .mood-overlay--blur {
+  backdrop-filter: blur(1.5px);
+}
+
+@keyframes mood-shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-2px); }
+  75% { transform: translateX(2px); }
+}
+
+@keyframes mood-shake-intense {
+  0%, 100% { transform: translate(0, 0); }
+  20% { transform: translate(-3px, 1px); }
+  40% { transform: translate(3px, -1px); }
+  60% { transform: translate(-2px, -2px); }
+  80% { transform: translate(2px, 2px); }
+}

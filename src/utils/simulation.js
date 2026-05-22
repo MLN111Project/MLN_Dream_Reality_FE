@@ -38,8 +38,19 @@ export function applyChoiceEffects(stats, effects) {
   return next;
 }
 
-export function determineEnding(stats) {
+export function determineEnding(stats, flags = {}) {
   const { passion, money, creativity, mentalHealth, socialRecognition } = stats;
+
+  if (
+    flags.collectivePath &&
+    creativity >= 55 &&
+    socialRecognition >= 50 &&
+    passion >= 48 &&
+    mentalHealth >= 38 &&
+    !flags.climbedCorporate
+  ) {
+    return 'collectiveChange';
+  }
 
   if (mentalHealth < 25 && passion < 35) return 'burnedOut';
   if (money > 75 && passion < 40 && creativity < 40) return 'corporateMachine';
@@ -50,6 +61,28 @@ export function determineEnding(stats) {
   if (money > 60 && passion < 50) return 'corporateMachine';
   if (passion < 35) return 'dreamAbandoned';
   return 'creativeSurvivor';
+}
+
+export function getEnvironmentComparison(career, environments) {
+  const base = applyCareerBase({ ...INITIAL_STATS }, career);
+  return environments.map((env) => {
+    const s = applyEnvironment(base, env);
+    return {
+      id: env.id,
+      title: env.title,
+      color: env.color,
+      creativity: Math.round(s.creativity),
+      money: Math.round(s.money),
+      mentalHealth: Math.round(s.mentalHealth),
+      passion: Math.round(s.passion),
+    };
+  });
+}
+
+export function getStatLevel(value) {
+  if (value >= 65) return 'high';
+  if (value >= 40) return 'mid';
+  return 'low';
 }
 
 export function getStressLevel(stats) {

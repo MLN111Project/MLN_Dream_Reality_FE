@@ -10,6 +10,13 @@ import { useLanguage } from './LanguageContext';
 
 const SimulationContext = createContext(null);
 
+const INITIAL_FLAGS = {
+  climbedCorporate: false,
+  foughtSystem: false,
+  walkedAway: false,
+  collectivePath: false,
+};
+
 export function SimulationProvider({ children }) {
   const { t } = useLanguage();
   const [careerId, setCareerId] = useState(null);
@@ -19,6 +26,7 @@ export function SimulationProvider({ children }) {
   const [stageIndex, setStageIndex] = useState(0);
   const [eventIndex, setEventIndex] = useState(0);
   const [loading, setLoading] = useState(true);
+  const [flags, setFlags] = useState({ ...INITIAL_FLAGS });
 
   const selectCareer = useCallback((selected) => {
     setCareerId(selected.id);
@@ -37,7 +45,19 @@ export function SimulationProvider({ children }) {
     [t]
   );
 
-  const applyChoice = useCallback((effects, stageLabel) => {
+  const applyChoice = useCallback((effects, stageLabel, choiceFlag) => {
+    if (choiceFlag) {
+      setFlags((f) => {
+        const next = { ...f, [choiceFlag]: true };
+        if (choiceFlag === 'foughtSystem' || choiceFlag === 'walkedAway') {
+          next.collectivePath = true;
+        }
+        if (choiceFlag === 'climbedCorporate') {
+          next.collectivePath = false;
+        }
+        return next;
+      });
+    }
     setStats((prev) => {
       const next = applyChoiceEffects(prev, effects);
       setHistory((h) => [...h, { label: stageLabel, ...next }]);
@@ -45,7 +65,7 @@ export function SimulationProvider({ children }) {
     });
   }, []);
 
-  const endingId = useMemo(() => determineEnding(stats), [stats]);
+  const endingId = useMemo(() => determineEnding(stats, flags), [stats, flags]);
 
   const resetSimulation = useCallback(() => {
     setCareerId(null);
@@ -54,6 +74,7 @@ export function SimulationProvider({ children }) {
     setHistory([]);
     setStageIndex(0);
     setEventIndex(0);
+    setFlags({ ...INITIAL_FLAGS });
   }, []);
 
   const value = {
@@ -65,6 +86,7 @@ export function SimulationProvider({ children }) {
     eventIndex,
     loading,
     endingId,
+    flags,
     setLoading,
     setCareer: selectCareer,
     setEnvironment: selectEnvironment,

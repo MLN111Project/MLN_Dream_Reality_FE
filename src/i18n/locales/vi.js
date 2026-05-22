@@ -69,13 +69,21 @@ export default {
     titleHighlight: 'Giấc mơ',
     subtitle:
       'Nghề nghiệp đại diện cho lực lượng sản xuất — sự sáng tạo, tài năng, kỹ năng và đam mê chờ được giải phóng.',
-    continue: 'Tiếp tục: Môi trường làm việc',
+    continue: 'Tiếp tục',
+  },
+  transition: {
+    line1: 'Bạn từng nghĩ tài năng là đủ.',
+    line2: 'Rồi hệ thống bắt đầu định giá bạn.',
+    line3: 'Quan hệ sản xuất đang chờ đợi.',
+    continue: 'Đối diện hệ thống',
   },
   workEnv: {
     title: 'Quan hệ',
     titleHighlight: 'Sản xuất',
     subtitle:
       'Là {career}, bạn sẽ làm việc ở đâu? Mỗi môi trường định hình lương, sáng tạo, tự do, sức khỏe tinh thần và sự công nhận.',
+    selectHint: 'Chọn một môi trường để tiếp tục',
+    selected: 'Đã chọn: {environment}',
     continue: 'Bắt đầu dòng đời',
   },
   timeline: {
@@ -83,7 +91,15 @@ export default {
     at: 'tại',
     currentStage: 'Giai đoạn hiện tại',
     eventProgress: 'Sự kiện {current}/{total}',
+    journeyProgress: 'Tiến độ hành trình',
+    questionProgress: 'Câu hỏi {current}/{total}',
+    selectAnswer: 'Chọn một đáp án để tiếp tục',
+    confirmHint: 'Nhấn Tiếp theo để ghi nhận lựa chọn',
+    next: 'Tiếp theo',
+    seeResults: 'Xem kết quả',
     nextStage: 'Giai đoạn tiếp theo',
+    stageComplete: 'Hoàn thành giai đoạn',
+    stageCompleteHint: 'Bạn đã trả lời hết sự kiện của giai đoạn này. Tiếp tục hành trình.',
     liveStatus: 'Trạng thái trực tiếp',
     systemStress: 'Căng thẳng hệ thống',
     creativeSuppression: 'Kìm hãm sáng tạo',
@@ -103,6 +119,36 @@ export default {
     home: 'Về trang chủ',
     finalQuote:
       'Đôi khi người tài năng không thất bại. Đôi khi hệ thống làm họ thất bại.',
+    personalizedTitle: 'Phân tích dành cho bạn',
+    comparisonTitle: 'Cùng giấc mơ, khác quan hệ sản xuất',
+    comparisonSubtitle:
+      'Người lao động không đổi — chỉ có cấu trúc xung quanh họ thay đổi.',
+    comparisonCareer: 'Nghề: {career}',
+    comparisonEnvColumn: 'Môi trường',
+    socialTitle: 'Bạn không cô đơn',
+    socialSubtitle: 'Áp lực cấu trúc vượt ra ngoài câu chuyện của bạn',
+    secretBadge: 'Kết cục bí mật đã mở khóa',
+    statLevel: { high: 'Cao', mid: 'Trung bình', low: 'Thấp', unstable: 'Bất ổn' },
+    personalized: {
+      burnedOut:
+        'Bạn không thiếu tài năng. Quan hệ sản xuất đòi hỏi năng suất liên tục đã triệt tiêu sức khỏe tinh thần.',
+      corporateMachine:
+        'Bạn tồn tại trong hệ thống, nhưng không còn là phiên bản từng mơ ước.',
+      creativeSurvivor:
+        'Lực lượng sản xuất bị bẻ cong — nhưng tia sáng sáng tạo vẫn còn.',
+      systemChanger:
+        'Bạn nhận ra vấn đề không nằm ở cá nhân, mà ở cấu trúc.',
+      dreamAbandoned:
+        'Bạn không thất bại. Điều kiện sản xuất khiến giấc mơ không thể duy trì.',
+      collectiveChange:
+        'Bạn chọn sáng tạo tập thể thay vì leo thang doanh nghiệp — chuyển hóa quan hệ sản xuất để giải phóng tài năng.',
+    },
+    social: {
+      itBurnout: 'Tỷ lệ burnout ngành IT',
+      teacherSalary: 'Giáo viên dưới mức sống tối thiểu',
+      designerOT: 'Designer làm OT không lương',
+      creatorDepression: 'Creator báo cáo trầm cảm',
+    },
   },
   careers: {
     teacher: { title: 'Giáo viên', tagline: 'Định hình tư duy, định hình tương lai' },
@@ -263,6 +309,14 @@ export default {
         'Đôi khi người tài năng không thất bại. Đôi khi hệ thống làm họ thất bại.',
       description:
         'Bạn buông giấc mơ không phải vì thiếu năng lực, mà vì điều kiện sản xuất khiến duy trì nó là không thể.',
+    },
+    collectiveChange: {
+      title: 'Thay đổi tập thể',
+      subtitle: 'Quan hệ sản xuất mới, lực lượng được giải phóng',
+      quote:
+        'Bạn không chờ phép. Bạn xây cấu trúc mới nơi tài năng được thở.',
+      description:
+        'Từ chối nấc thang doanh nghiệp và nuôi dưỡng cộng đồng, bạn bắt đầu chuyển hóa quan hệ sản xuất — giải phóng lực lượng sản xuất cho sáng tạo chung.',
     },
   },
 };

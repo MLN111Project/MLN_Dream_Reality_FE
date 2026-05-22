@@ -1,12 +1,11 @@
-import { useState, useEffect, useCallback, useMemo } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Button, Steps } from 'antd';
+import { Button, Steps, Progress } from 'antd';
 import { ArrowLeftOutlined } from '@ant-design/icons';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import PageTransition from '../../components/PageTransition';
-import DecisionModal from '../../components/DecisionModal';
-import StatBar from '../../components/StatBar';
-import LiveStatsChart from '../../components/LiveStatsChart';
+import TimelineDecisionPanel from '../../components/TimelineDecisionPanel';
+import StatsMoodLayer from '../../components/StatsMoodLayer';
 import {
   getTimelineStages,
   getTimelineEvents,
@@ -19,7 +18,18 @@ import { getStressLevel, getSuppressionLevel } from '../../utils/simulation';
 import { playSound } from '../../utils/sounds';
 import './Timeline.css';
 
-const STAT_KEYS = ['passion', 'money', 'creativity', 'mentalHealth', 'socialRecognition'];
+function countEventsBefore(stages, eventsMap, stageIdx, eventIdx) {
+  let n = 0;
+  for (let i = 0; i < stageIdx; i += 1) {
+    n += eventsMap[stages[i].id]?.length || 0;
+  }
+  n += eventIdx;
+  return n;
+}
+
+function countTotalEvents(stages, eventsMap) {
+  return stages.reduce((sum, s) => sum + (eventsMap[s.id]?.length || 0), 0);
+}
 
 export default function Timeline() {
   const navigate = useNavigate();
@@ -28,7 +38,6 @@ export default function Timeline() {
     careerId,
     environmentId,
     stats,
-    history,
     stageIndex,
     eventIndex,
     setStageIndex,
@@ -47,8 +56,37 @@ export default function Timeline() {
     [lang, environmentId]
   );
 
-  const [modalOpen, setModalOpen] = useState(false);
-  const [currentEvent, setCurrentEvent] = useState(null);
+  const [selectedChoice, setSelectedChoice] = useState(null);
+
+  const stage = timelineStages[stageIndex];
+  const events = timelineEvents[stage?.id] || [];
+  const currentEvent = eventIndex < events.length ? events[eventIndex] : null;
+  const stress = getStressLevel(stats);
+  const suppression = getSuppressionLevel(stats);
+
+  const totalQuestions = useMemo(
+    () => countTotalEvents(timelineStages, timelineEvents),
+    [timelineStages, timelineEvents]
+  );
+
+  const completedQuestions = useMemo(
+    () => countEventsBefore(timelineStages, timelineEvents, stageIndex, eventIndex),
+    [timelineStages, timelineEvents, stageIndex, eventIndex]
+  );
+
+  const progressCurrent = currentEvent ? completedQuestions + 1 : completedQuestions;
+  const journeyPercent =
+    totalQuestions > 0 ? Math.round((progressCurrent / totalQuestions) * 100) : 0;
+
+  const isLastQuestion =
+    stageIndex === timelineStages.length - 1 &&
+    eventIndex === events.length - 1 &&
+    !!currentEvent;
+
+  const panelMode =
+    !currentEvent && eventIndex >= events.length && stageIndex < timelineStages.length - 1
+      ? 'stageComplete'
+      : 'question';
 
   useEffect(() => {
     if (!careerId || !environmentId) {
@@ -56,52 +94,11 @@ export default function Timeline() {
     }
   }, [careerId, environmentId, navigate]);
 
-  const stage = timelineStages[stageIndex];
-  const events = timelineEvents[stage?.id] || [];
-  const stress = getStressLevel(stats);
-  const suppression = getSuppressionLevel(stats);
-
-  const openNextEvent = useCallback(() => {
-    if (eventIndex < events.length) {
-      setCurrentEvent(events[eventIndex]);
-      setModalOpen(true);
-      playSound('dramatic');
-    }
-  }, [eventIndex, events]);
-
   useEffect(() => {
-    if (
-      careerId &&
-      environmentId &&
-      events.length > 0 &&
-      eventIndex < events.length &&
-      !modalOpen
-    ) {
-      const timer = setTimeout(openNextEvent, 800);
-      return () => clearTimeout(timer);
-    }
-  }, [
-    stageIndex,
-    eventIndex,
-    careerId,
-    environmentId,
-    events.length,
-    modalOpen,
-    openNextEvent,
-  ]);
+    setSelectedChoice(null);
+  }, [stageIndex, eventIndex, lang]);
 
-  useEffect(() => {
-    if (modalOpen && currentEvent && stage) {
-      const updated = events.find((e) => e.id === currentEvent.id);
-      if (updated) setCurrentEvent(updated);
-    }
-  }, [lang, modalOpen, currentEvent, events, stage]);
-
-  const handleChoice = (choice) => {
-    applyChoice(choice.effects, `${stage.title} — ${currentEvent?.title}`);
-    setModalOpen(false);
-    setCurrentEvent(null);
-
+  const advanceTimeline = () => {
     const nextEventIndex = eventIndex + 1;
     if (nextEventIndex < events.length) {
       setEventIndex(nextEventIndex);
@@ -114,62 +111,99 @@ export default function Timeline() {
     }
   };
 
-  if (!career || !environment) return null;
+  const handleConfirm = () => {
+    if (!selectedChoice || !currentEvent) return;
+    if (stats.mentalHealth < 40) playSound('stress');
+    applyChoice(
+      selectedChoice.effects,
+      `${stage.title} — ${currentEvent.title}`,
+      selectedChoice.flag
+    );
+    setSelectedChoice(null);
+    advanceTimeline();
+  };
+
+  const handleNextStage = () => {
+    playSound('click');
+    setStageIndex(stageIndex + 1);
+    setEventIndex(0);
+  };
+
+  if (!career || !environment || !stage) return null;
 
   return (
-    <PageTransition className="timeline-page page-container">
-      <motion.div
-        className="timeline-page__top"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-      >
-        <Button
-          type="text"
-          icon={<ArrowLeftOutlined />}
-          onClick={() => navigate('/environment')}
-          className="back-btn"
-        >
-          {t('common.back')}
-        </Button>
-        <span className="step-indicator">{t('common.stepTimeline')}</span>
-      </motion.div>
+    <StatsMoodLayer stats={stats}>
+      <PageTransition className="timeline-page page-container">
+        <header className="timeline-page__header">
+          <motion.div
+            className="timeline-page__top"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+          >
+            <Button
+              type="text"
+              icon={<ArrowLeftOutlined />}
+              onClick={() => navigate('/environment')}
+              className="back-btn"
+            >
+              {t('common.back')}
+            </Button>
+            <span className="step-indicator">{t('common.stepTimeline')}</span>
+          </motion.div>
 
-      <motion.div
-        className="timeline-page__intro"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-      >
-        <h1 className="timeline-page__title">
-          {t('timeline.lifeAs')}{' '}
-          <span className="gradient-text">{career.title}</span>
-        </h1>
-        <p className="timeline-page__env">
-          {t('timeline.at')} {environment.title}
-        </p>
-      </motion.div>
+          <motion.div
+            className="timeline-page__intro"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+          >
+            <h1 className="timeline-page__title">
+              {t('timeline.lifeAs')}{' '}
+              <span className="gradient-text">{career.title}</span>
+            </h1>
+            <p className="timeline-page__env">
+              {t('timeline.at')} {environment.title}
+            </p>
+          </motion.div>
+        </header>
 
-      <Steps
-        current={stageIndex}
-        items={timelineStages.map((s) => ({
-          title: s.title,
-          description: s.subtitle,
-        }))}
-        className="timeline-steps"
-      />
+        <div className="timeline-page__main">
+          <aside className="timeline-page__process glass-card">
+            <div className="timeline-page__journey">
+              <div className="timeline-page__journey-head">
+                <span className="timeline-page__journey-label">
+                  {t('timeline.journeyProgress')}
+                </span>
+                <span className="timeline-page__journey-count">
+                  {t('timeline.questionProgress', {
+                    current: Math.max(progressCurrent, 1),
+                    total: totalQuestions,
+                  })}
+                </span>
+              </div>
+              <Progress
+                percent={journeyPercent}
+                showInfo={false}
+                strokeColor={{ from: '#8b5cf6', to: '#06b6d4' }}
+                trailColor="rgba(255,255,255,0.08)"
+                size="small"
+              />
+            </div>
 
-      <div className="timeline-page__layout">
-        <motion.div
-          className="timeline-page__stage glass-card"
-          key={stage.id}
-          initial={{ opacity: 0, x: -20 }}
-          animate={{ opacity: 1, x: 0 }}
-        >
-          <AnimatePresence mode="wait">
+            <Steps
+              direction="vertical"
+              current={stageIndex}
+              className="timeline-steps timeline-steps--vertical"
+              items={timelineStages.map((s) => ({
+                title: s.title,
+                description: s.subtitle,
+              }))}
+            />
+
             <motion.div
+              className="timeline-page__stage"
               key={stage.id}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
             >
               <span className="timeline-page__stage-label">
                 {t('timeline.currentStage')}
@@ -179,95 +213,35 @@ export default function Timeline() {
               {events.length > 0 && (
                 <p className="timeline-page__event-progress">
                   {t('timeline.eventProgress', {
-                    current: Math.min(eventIndex + 1, events.length),
+                    current: Math.min(
+                      currentEvent ? eventIndex + 1 : eventIndex,
+                      events.length
+                    ),
                     total: events.length,
                   })}
                 </p>
               )}
-              {!modalOpen &&
-                eventIndex >= events.length &&
-                stageIndex < timelineStages.length - 1 && (
-                  <Button
-                    type="primary"
-                    className="sim-btn-primary"
-                    onClick={() => {
-                      setStageIndex(stageIndex + 1);
-                      setEventIndex(0);
-                    }}
-                  >
-                    {t('timeline.nextStage')}
-                  </Button>
-                )}
             </motion.div>
-          </AnimatePresence>
-        </motion.div>
+          </aside>
 
-        <motion.div className="timeline-page__stats">
-          <motion.div
-            className="timeline-page__indicators glass-card"
-            animate={{
-              boxShadow:
-                stress > 60
-                  ? '0 0 40px rgba(239, 68, 68, 0.3)'
-                  : 'var(--shadow-glass)',
-            }}
-          >
-            <h3>{t('timeline.liveStatus')}</h3>
-            <motion.div
-              className="timeline-indicator"
-              animate={stress > 55 ? { scale: [1, 1.02, 1] } : {}}
-              transition={{ repeat: stress > 55 ? Infinity : 0, duration: 2 }}
-            >
-              <span className="stat-label">{t('timeline.systemStress')}</span>
-              <motion.div className="timeline-indicator__bar timeline-indicator__bar--stress">
-                <motion.div
-                  className="timeline-indicator__fill"
-                  animate={{ width: `${stress}%` }}
-                  transition={{ duration: 0.8 }}
-                />
-              </motion.div>
-              <span className="timeline-indicator__val" style={{ color: '#ef4444' }}>
-                {Math.round(stress)}%
-              </span>
-            </motion.div>
-            <motion.div className="timeline-indicator">
-              <span className="stat-label">{t('timeline.creativeSuppression')}</span>
-              <motion.div className="timeline-indicator__bar timeline-indicator__bar--suppress">
-                <motion.div
-                  className="timeline-indicator__fill"
-                  animate={{ width: `${suppression}%` }}
-                  transition={{ duration: 0.8 }}
-                />
-              </motion.div>
-              <span className="timeline-indicator__val" style={{ color: '#f97316' }}>
-                {Math.round(suppression)}%
-              </span>
-            </motion.div>
-          </motion.div>
-
-          <motion.div className="timeline-page__bars glass-card">
-            <h3>{t('timeline.yourStats')}</h3>
-            {STAT_KEYS.map((key, i) => (
-              <StatBar
-                key={key}
-                statKey={key}
-                value={stats[key]}
-                delay={i * 0.08}
-                showWarning
+          <div className="timeline-page__qa">
+            {(currentEvent || panelMode === 'stageComplete') && (
+              <TimelineDecisionPanel
+                event={currentEvent}
+                mode={panelMode}
+                stats={stats}
+                stress={stress}
+                suppression={suppression}
+                selectedChoice={selectedChoice}
+                onSelectChoice={setSelectedChoice}
+                onConfirm={handleConfirm}
+                onNextStage={handleNextStage}
+                isLastQuestion={isLastQuestion}
               />
-            ))}
-          </motion.div>
-        </motion.div>
-      </div>
-
-      <LiveStatsChart history={history} />
-
-      <DecisionModal
-        open={modalOpen}
-        event={currentEvent}
-        onChoice={handleChoice}
-        onClose={() => setModalOpen(false)}
-      />
-    </PageTransition>
+            )}
+          </div>
+        </div>
+      </PageTransition>
+    </StatsMoodLayer>
   );
 }

@@ -51,6 +51,7 @@ export function getTimelineEvents(lang) {
         choices: ev.choices.map((ch, i) => ({
           ...ch,
           label: tr.choices[i],
+          flag: ch.flag,
         })),
       };
     });

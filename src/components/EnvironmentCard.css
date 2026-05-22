@@ -1,43 +1,256 @@
-.env-card {
-  padding: 1.5rem;
-  text-align: left;
-  cursor: pointer;
-  border: 1px solid var(--glass-border);
+/* Premium environment card — Netflix / Steam / Vision-style */
+.env-card--premium {
+  position: relative;
   width: 100%;
+  height: 100%;
+  min-height: 0;
+  padding: 0;
+  margin: 0;
+  border: none;
+  border-radius: 16px;
+  cursor: pointer;
+  text-align: left;
   color: inherit;
   font-family: inherit;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0;
+  overflow: hidden;
+  background: linear-gradient(
+    165deg,
+    rgba(255, 255, 255, 0.07) 0%,
+    rgba(255, 255, 255, 0.02) 42%,
+    rgba(0, 0, 0, 0.35) 100%
+  );
+  backdrop-filter: blur(20px) saturate(1.2);
+  -webkit-backdrop-filter: blur(20px) saturate(1.2);
+  box-shadow:
+    0 4px 24px rgba(0, 0, 0, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  transition:
+    box-shadow 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+    transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  isolation: isolate;
 }
 
-.env-card--selected {
-  border-color: var(--env-color);
-  box-shadow: 0 0 40px color-mix(in srgb, var(--env-color) 35%, transparent);
+.env-card--premium::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(
+    145deg,
+    rgba(255, 255, 255, 0.18),
+    rgba(255, 255, 255, 0.04) 40%,
+    rgba(255, 255, 255, 0.02) 60%,
+    rgba(255, 255, 255, 0.1)
+  );
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+  z-index: 2;
 }
 
-.env-card__header {
+.env-card__glow {
+  position: absolute;
+  inset: -40% -20%;
+  background: radial-gradient(
+    ellipse 80% 60% at 50% 0%,
+    color-mix(in srgb, var(--env-color) 28%, transparent),
+    transparent 70%
+  );
+  opacity: 0.45;
+  pointer-events: none;
+  z-index: 0;
+  transition: opacity 0.4s ease;
+}
+
+.env-card__accent {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--env-color),
+    transparent
+  );
+  opacity: 0.85;
+  z-index: 1;
+}
+
+.env-card--premium:hover .env-card__glow {
+  opacity: 0.75;
+}
+
+.env-card--premium:hover {
+  box-shadow:
+    0 12px 40px rgba(0, 0, 0, 0.45),
+    0 0 0 1px rgba(255, 255, 255, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.14);
+}
+
+.env-card--selected.env-card--premium {
+  box-shadow:
+    0 0 0 1px color-mix(in srgb, var(--env-color) 70%, white),
+    0 0 32px color-mix(in srgb, var(--env-color) 45%, transparent),
+    0 16px 48px rgba(0, 0, 0, 0.5),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.env-card--selected .env-card__glow {
+  opacity: 1;
+}
+
+.env-card--selected::before {
+  background: linear-gradient(
+    145deg,
+    color-mix(in srgb, var(--env-color) 80%, white),
+    color-mix(in srgb, var(--env-color) 35%, transparent) 50%,
+    rgba(255, 255, 255, 0.08)
+  );
+}
+
+.env-card__check {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 4;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
   display: flex;
   align-items: center;
-  gap: 0.75rem;
-  margin-bottom: 0.75rem;
+  justify-content: center;
+  font-size: 12px;
+  color: #fff;
+  background: var(--env-color);
+  box-shadow: 0 0 16px color-mix(in srgb, var(--env-color) 60%, transparent);
 }
 
-.env-card__header h3 {
-  font-size: 1.1rem;
-  font-weight: 600;
+.env-card__icon-wrap {
+  position: relative;
+  z-index: 1;
+  flex-shrink: 0;
+  width: 44px;
+  height: 44px;
+  margin: 14px 14px 0;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: color-mix(in srgb, var(--env-color) 18%, rgba(0, 0, 0, 0.4));
+  color: var(--env-color);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.12),
+    0 4px 12px rgba(0, 0, 0, 0.25);
+}
+
+.env-card__title {
+  position: relative;
+  z-index: 1;
+  margin: 10px 14px 0;
+  font-size: clamp(0.72rem, 0.95vw, 0.88rem);
+  font-weight: 650;
+  line-height: 1.25;
+  letter-spacing: -0.02em;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 .env-card__desc {
-  font-size: 0.85rem;
+  position: relative;
+  z-index: 1;
+  margin: 6px 14px 0;
+  font-size: clamp(0.58rem, 0.72vw, 0.68rem);
+  line-height: 1.35;
   color: var(--text-muted);
-  margin-bottom: 1.25rem;
-  line-height: 1.5;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  flex-shrink: 0;
 }
 
 .env-card__stats {
+  position: relative;
+  z-index: 1;
+  flex: 1;
+  min-height: 0;
   display: flex;
   flex-direction: column;
-  gap: 0.6rem;
+  justify-content: space-evenly;
+  gap: 6px;
+  margin: 12px 14px 14px;
+  padding-top: 10px;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
 }
 
-.env-card__stat .stat-label {
-  font-size: 0.65rem;
+.env-card__stat {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-height: 0;
+}
+
+.env-card__stat-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+}
+
+.env-card__stat-label {
+  font-size: clamp(0.48rem, 0.58vw, 0.54rem);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.env-card__stat-value {
+  font-size: clamp(0.5rem, 0.6vw, 0.56rem);
+  font-weight: 700;
+  color: var(--env-color);
+  font-variant-numeric: tabular-nums;
+  flex-shrink: 0;
+}
+
+.env-card__meter {
+  height: 4px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.06);
+  overflow: hidden;
+}
+
+.env-card__meter-fill {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(
+    90deg,
+    color-mix(in srgb, var(--env-color) 85%, black),
+    var(--env-color)
+  );
+  box-shadow: 0 0 10px color-mix(in srgb, var(--env-color) 50%, transparent);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .env-card--premium {
+    transition: box-shadow 0.2s ease;
+  }
 }

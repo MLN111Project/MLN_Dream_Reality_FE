@@ -201,14 +201,17 @@ export const timelineEvents = {
         {
           label: 'Climb the ladder',
           effects: { money: 20, passion: -15, creativity: -15, mentalHealth: -10 },
+          flag: 'climbedCorporate',
         },
         {
           label: 'Fight for systemic change',
           effects: { passion: 10, socialRecognition: 15, mentalHealth: -5, money: -5 },
+          flag: 'foughtSystem',
         },
         {
           label: 'Walk away from the system',
           effects: { passion: 5, mentalHealth: 10, money: -20, creativity: 10 },
+          flag: 'walkedAway',
         },
       ],
     },

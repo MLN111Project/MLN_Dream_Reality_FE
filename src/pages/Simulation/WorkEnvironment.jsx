@@ -1,8 +1,8 @@
 import { useState, useMemo, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Button, Row, Col } from 'antd';
+import { Button } from 'antd';
 import { ArrowRightOutlined, ArrowLeftOutlined } from '@ant-design/icons';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import PageTransition from '../../components/PageTransition';
 import EnvironmentCard from '../../components/EnvironmentCard';
 import { getEnvironments, getCareers } from '../../i18n/localizedData';
@@ -28,10 +28,11 @@ export default function WorkEnvironment() {
     }
   }, [lang, environmentId, environments]);
 
-  if (!careerId) {
-    navigate('/dream', { replace: true });
-    return null;
-  }
+  useEffect(() => {
+    if (!careerId) navigate('/dream', { replace: true });
+  }, [careerId, navigate]);
+
+  if (!careerId) return null;
 
   const handleSelect = (env) => {
     playSound('click');
@@ -46,58 +47,90 @@ export default function WorkEnvironment() {
   };
 
   return (
-    <PageTransition className="work-env page-container">
-      <motion.div
-        className="work-env__header"
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-      >
-        <Button
-          type="text"
-          icon={<ArrowLeftOutlined />}
-          onClick={() => navigate('/dream')}
-          className="back-btn"
-        >
-          {t('common.back')}
-        </Button>
-        <span className="step-indicator">{t('common.step', { n: 2 })}</span>
-        <h1 className="cinematic-heading work-env__title">
-          {t('workEnv.title')}{' '}
-          <span className="landing__reality">{t('workEnv.titleHighlight')}</span>
-        </h1>
-        <p className="section-quote work-env__subtitle">
-          {t('workEnv.subtitle', { career: career?.title || '' })}
-        </p>
-      </motion.div>
-
-      <Row gutter={[20, 20]} className="work-env__grid">
-        {environments.map((env, i) => (
-          <Col xs={24} md={12} key={env.id}>
-            <EnvironmentCard
-              env={env}
-              selected={selected?.id === env.id}
-              onSelect={handleSelect}
-              index={i}
-            />
-          </Col>
-        ))}
-      </Row>
+    <PageTransition className="work-env work-env--dashboard">
+      <div className="work-env__backdrop" aria-hidden>
+        <div className="work-env__spotlight" />
+      </div>
 
       <motion.div
-        className="work-env__footer"
-        animate={{ opacity: selected ? 1 : 0.4 }}
+        className="work-env__shell"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.5 }}
       >
-        <Button
-          type="primary"
-          size="large"
-          className="sim-btn-primary"
-          disabled={!selected}
-          onClick={handleContinue}
-          icon={<ArrowRightOutlined />}
-          iconPosition="end"
-        >
-          {t('workEnv.continue')}
-        </Button>
+        <header className="work-env__header">
+          <Button
+            type="text"
+            icon={<ArrowLeftOutlined />}
+            onClick={() => navigate('/transition')}
+            className="work-env__back"
+          >
+            {t('common.back')}
+          </Button>
+          <span className="step-indicator">{t('common.step', { n: 2 })}</span>
+          <h1 className="work-env__title">
+            {t('workEnv.title')}{' '}
+            <span className="work-env__title-accent">{t('workEnv.titleHighlight')}</span>
+          </h1>
+          <p className="work-env__subtitle">
+            {t('workEnv.subtitle', { career: career?.title || '' })}
+          </p>
+        </header>
+
+        <section className="work-env__stage" aria-label={t('workEnv.title')}>
+          {!selected && <p className="work-env__hint">{t('workEnv.selectHint')}</p>}
+          <div className="work-env__grid">
+            {environments.map((env, i) => (
+              <EnvironmentCard
+                key={env.id}
+                env={env}
+                selected={selected?.id === env.id}
+                onSelect={handleSelect}
+                index={i}
+              />
+            ))}
+          </div>
+        </section>
+
+        <footer className="work-env__footer">
+          <AnimatePresence mode="wait">
+            {selected ? (
+              <motion.p
+                key={selected.id}
+                className="work-env__selection"
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -6 }}
+                style={{ '--env-color': selected.color }}
+              >
+                <span className="work-env__selection-dot" />
+                {t('workEnv.selected', { environment: selected.title })}
+              </motion.p>
+            ) : (
+              <motion.p
+                key="empty"
+                className="work-env__selection work-env__selection--muted"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+              >
+                {t('workEnv.selectHint')}
+              </motion.p>
+            )}
+          </AnimatePresence>
+
+          <Button
+            type="primary"
+            size="large"
+            className="work-env__cta sim-btn-primary"
+            disabled={!selected}
+            onClick={handleContinue}
+            icon={<ArrowRightOutlined />}
+            iconPlacement="end"
+          >
+            {t('workEnv.continue')}
+          </Button>
+        </footer>
       </motion.div>
     </PageTransition>
   );

@@ -35,7 +35,7 @@ export default function DreamSelection() {
   const handleContinue = () => {
     if (!selected) return;
     playSound('click');
-    navigate('/environment');
+    navigate('/transition');
   };
 
   return (

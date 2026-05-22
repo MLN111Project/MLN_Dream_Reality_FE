@@ -68,13 +68,21 @@ export default {
     titleHighlight: 'Dream',
     subtitle:
       'Your career represents your productive forces — human creativity, talent, skills, and passion waiting to be unleashed.',
-    continue: 'Continue to Work Environment',
+    continue: 'Continue',
+  },
+  transition: {
+    line1: 'You once believed talent was enough.',
+    line2: 'Then the system began to price you.',
+    line3: 'Relations of production are waiting.',
+    continue: 'Face the system',
   },
   workEnv: {
     title: 'Relations of',
     titleHighlight: 'Production',
     subtitle:
       'As a {career}, where will you work? Each environment shapes salary, creativity, freedom, mental health, and recognition.',
+    selectHint: 'Select an environment to continue',
+    selected: 'Selected: {environment}',
     continue: 'Begin Life Timeline',
   },
   timeline: {
@@ -82,7 +90,15 @@ export default {
     at: 'at',
     currentStage: 'Current Stage',
     eventProgress: 'Event {current} of {total}',
+    journeyProgress: 'Journey progress',
+    questionProgress: 'Question {current}/{total}',
+    selectAnswer: 'Select an answer to continue',
+    confirmHint: 'Press Next to confirm your choice',
+    next: 'Next',
+    seeResults: 'View results',
     nextStage: 'Next Stage',
+    stageComplete: 'Stage complete',
+    stageCompleteHint: 'You finished all events in this stage. Continue your journey.',
     liveStatus: 'Live Status',
     systemStress: 'System Stress',
     creativeSuppression: 'Creative Suppression',
@@ -102,6 +118,36 @@ export default {
     home: 'Back to Home',
     finalQuote:
       'Sometimes talented people do not fail. Sometimes the system fails them.',
+    personalizedTitle: 'Your analysis',
+    comparisonTitle: 'Same dream, different relations of production',
+    comparisonSubtitle:
+      'The worker does not change — only the structure around them does.',
+    comparisonCareer: 'Career: {career}',
+    comparisonEnvColumn: 'Environment',
+    socialTitle: 'You are not alone',
+    socialSubtitle: 'Structural pressures exist beyond your story',
+    secretBadge: 'Secret ending unlocked',
+    statLevel: { high: 'High', mid: 'Medium', low: 'Low', unstable: 'Unstable' },
+    personalized: {
+      burnedOut:
+        'You are not lacking talent. Relations of production demanding endless productivity consumed your mental health.',
+      corporateMachine:
+        'You exist within the system, but you are no longer the person who once dreamed.',
+      creativeSurvivor:
+        'Productive forces bent under pressure — yet a spark of creativity survived.',
+      systemChanger:
+        'You saw that the problem is not the individual, but the structure.',
+      dreamAbandoned:
+        'You did not fail. The conditions of production made the dream impossible to sustain.',
+      collectiveChange:
+        'You chose collective creation over corporate ladders — transforming relations of production to liberate talent.',
+    },
+    social: {
+      itBurnout: 'IT sector burnout rate',
+      teacherSalary: 'Teachers below living wage',
+      designerOT: 'Designers working unpaid OT',
+      creatorDepression: 'Creators reporting depression',
+    },
   },
   careers: {
     teacher: { title: 'Teacher', tagline: 'Shape minds, shape the future' },
@@ -256,6 +302,14 @@ export default {
         'Sometimes talented people do not fail. Sometimes the system fails them.',
       description:
         'You let go of the dream not because you lacked ability, but because the conditions of production made sustaining it impossible.',
+    },
+    collectiveChange: {
+      title: 'Collective Change',
+      subtitle: 'New relations of production, liberated forces',
+      quote:
+        'You did not wait for permission. You built new structures where talent could breathe.',
+      description:
+        'By refusing the corporate ladder and nurturing community, you began transforming relations of production — freeing productive forces for collective creation.',
     },
   },
 };

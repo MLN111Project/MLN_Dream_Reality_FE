@@ -12,9 +12,13 @@ import {
 import PageTransition from '../../components/PageTransition';
 import QuoteBlock from '../../components/QuoteBlock';
 import StatBar from '../../components/StatBar';
+import LiveStatsChart from '../../components/LiveStatsChart';
+import EnvironmentComparison from '../../components/EnvironmentComparison';
+import SocialStats from '../../components/SocialStats';
 import { getEndings, getCareers, getEnvironments } from '../../i18n/localizedData';
 import { useSimulation } from '../../context/SimulationContext';
 import { useLanguage } from '../../context/LanguageContext';
+import { getEnvironmentComparison } from '../../utils/simulation';
 import { playSound } from '../../utils/sounds';
 import './Ending.css';
 
@@ -23,7 +27,8 @@ const STAT_KEYS = ['passion', 'money', 'creativity', 'mentalHealth', 'socialReco
 export default function Ending() {
   const navigate = useNavigate();
   const { lang, t } = useLanguage();
-  const { careerId, environmentId, stats, endingId, resetSimulation } = useSimulation();
+  const { careerId, environmentId, stats, history, endingId, resetSimulation } =
+    useSimulation();
 
   const endings = useMemo(() => getEndings(lang), [lang]);
   const ending = endings[endingId] || endings.creativeSurvivor;
@@ -31,10 +36,19 @@ export default function Ending() {
     () => getCareers(lang).find((c) => c.id === careerId),
     [lang, careerId]
   );
+  const environments = useMemo(() => getEnvironments(lang), [lang]);
   const environment = useMemo(
-    () => getEnvironments(lang).find((e) => e.id === environmentId),
-    [lang, environmentId]
+    () => environments.find((e) => e.id === environmentId),
+    [environments, environmentId]
   );
+  const comparisonRows = useMemo(
+    () => (career ? getEnvironmentComparison(career, environments) : []),
+    [career, environments]
+  );
+  const personalized =
+    t(`ending.personalized.${endingId}`) !== `ending.personalized.${endingId}`
+      ? t(`ending.personalized.${endingId}`)
+      : null;
 
   useEffect(() => {
     if (!careerId || !environmentId) {
@@ -80,6 +94,17 @@ export default function Ending() {
         {t('common.stepEnding')}
       </motion.span>
 
+      {endingId === 'collectiveChange' && (
+        <motion.span
+          className="ending-page__secret-badge"
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ delay: 0.2 }}
+        >
+          {t('ending.secretBadge')}
+        </motion.span>
+      )}
+
       <motion.h1
         className="ending-page__title cinematic-heading"
         initial={{ opacity: 0, y: 40 }}
@@ -106,6 +131,12 @@ export default function Ending() {
         transition={{ delay: 0.9 }}
       >
         <motion.div className="ending-page__main glass-card">
+          {personalized && (
+            <div className="ending-page__personalized">
+              <h3>{t('ending.personalizedTitle')}</h3>
+              <p>{personalized}</p>
+            </div>
+          )}
           <QuoteBlock quote={ending.quote} />
           <p className="ending-page__description">{ending.description}</p>
 
@@ -156,6 +187,26 @@ export default function Ending() {
           ))}
         </motion.div>
       </motion.div>
+
+      <motion.div
+        className="ending-page__chart-section"
+        initial={{ opacity: 0, y: 24 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 1.3 }}
+      >
+        <LiveStatsChart history={history} />
+      </motion.div>
+
+      <div className="ending-page__extras">
+        {comparisonRows.length > 0 && (
+          <EnvironmentComparison
+            rows={comparisonRows}
+            careerTitle={career.title}
+            highlightId={environmentId}
+          />
+        )}
+        <SocialStats />
+      </div>
 
       <motion.div
         className="ending-page__theory glass-card"

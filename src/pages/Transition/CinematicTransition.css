@@ -1,0 +1,52 @@
+.cinematic-transition {
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
+  background: #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.cinematic-transition__vignette {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at center, transparent 30%, #000 85%);
+  pointer-events: none;
+}
+
+.cinematic-transition__pulse {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at center, rgba(139, 92, 246, 0.08) 0%, transparent 50%);
+  animation: cinematic-pulse 1.2s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes cinematic-pulse {
+  0%, 100% { opacity: 0.4; transform: scale(1); }
+  50% { opacity: 0.9; transform: scale(1.05); }
+}
+
+.cinematic-transition__content {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  padding: 2rem;
+  max-width: 720px;
+}
+
+.cinematic-transition__line {
+  font-size: clamp(1.35rem, 4vw, 2rem);
+  font-style: italic;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  margin-bottom: 2rem;
+  text-shadow: 0 0 40px rgba(139, 92, 246, 0.3);
+}
+
+.cinematic-transition__line:last-of-type {
+  margin-bottom: 3rem;
+  color: var(--warning-orange);
+}

@@ -54,6 +54,18 @@ export const endings = {
     description:
       'You let go of the dream not because you lacked ability, but because the conditions of production made sustaining it impossible.',
   },
+  collectiveChange: {
+    id: 'collectiveChange',
+    title: 'Collective Change',
+    subtitle: 'New relations of production, liberated forces',
+    quote:
+      'You did not wait for permission. You built new structures where talent could breathe.',
+    color: '#10b981',
+    gradient: 'linear-gradient(135deg, #047857, #10b981)',
+    description:
+      'By refusing the corporate ladder and nurturing community, you began transforming relations of production — freeing productive forces for collective creation.',
+    secret: true,
+  },
 };
 
 export const quotes = [

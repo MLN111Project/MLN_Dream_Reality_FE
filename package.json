@@ -9,6 +9,9 @@
     "free:3001": "node scripts/free-port.mjs 3001",
     "dev:all": "npm run free:3001 && concurrently \"npm run dev\" \"npm run server\"",
     "build": "vite build",
+    "start": "node server/index.js",
+    "render:build": "npm install",
+    "render:start": "node server/index.js",
     "lint": "eslint .",
     "preview": "vite preview"
   },

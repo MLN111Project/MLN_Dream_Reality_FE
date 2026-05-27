@@ -91,6 +91,8 @@ export default {
     invalidEnvironment: "Môi trường không hợp lệ. Tải lại trang và chọn lại.",
     roomFull: "Phòng đã đủ 8 nhóm.",
     gameStarted: "Game đã bắt đầu, không thể tham gia thêm.",
+    socketUrlMissing:
+      "Chưa cấu hình server game. Trên Vercel thêm biến VITE_SOCKET_URL = URL HTTPS Render (vd. https://xxx.onrender.com) rồi redeploy.",
     serverOffline:
       "Không kết nối được máy chủ game (cổng 3001). Chạy: npm run dev:all (hoặc npm run server trong terminal khác).",
     waitingTitle: "Phòng chờ",

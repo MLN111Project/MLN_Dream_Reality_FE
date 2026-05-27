@@ -42,6 +42,39 @@ const SERVER_BUILD = 'timeline-v2';
 const PORT = process.env.PORT || 3001;
 const rooms = new Map();
 
+function getAllowedOrigins() {
+  const raw = process.env.CLIENT_ORIGINS || process.env.CLIENT_ORIGIN || '';
+  const list = raw
+    .split(',')
+    .map((s) => s.trim())
+    .filter(Boolean);
+  if (!list.length) return '*';
+  return list;
+}
+
+const allowedOrigins = getAllowedOrigins();
+
+function corsOriginAllowed(origin) {
+  if (!origin) return true;
+  if (allowedOrigins === '*') return true;
+  if (Array.isArray(allowedOrigins)) {
+    return allowedOrigins.includes(origin);
+  }
+  return false;
+}
+
+function setCorsHeaders(req, res) {
+  const origin = req.headers.origin;
+  if (allowedOrigins === '*') {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+  } else if (origin && corsOriginAllowed(origin)) {
+    res.setHeader('Access-Control-Allow-Origin', origin);
+    res.setHeader('Vary', 'Origin');
+  }
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+}
+
 function readJsonBody(req) {
   return new Promise((resolve, reject) => {
     const chunks = [];
@@ -65,6 +98,13 @@ function sendJson(res, status, data) {
 
 const httpServer = createServer(async (req, res) => {
   const url = req.url?.split('?')[0];
+  setCorsHeaders(req, res);
+
+  if (req.method === 'OPTIONS') {
+    res.writeHead(204);
+    res.end();
+    return;
+  }
 
   if (url === '/health') {
     sendJson(res, 200, {
@@ -106,7 +146,10 @@ const httpServer = createServer(async (req, res) => {
 });
 
 const io = new Server(httpServer, {
-  cors: { origin: '*' },
+  cors: {
+    origin: allowedOrigins === '*' ? true : allowedOrigins,
+    credentials: true,
+  },
 });
 
 function getRoom(code) {
@@ -258,7 +301,9 @@ function scheduleAutoAdvance(room) {
 }
 
 httpServer.listen(PORT, () => {
+  const originLog =
+    allowedOrigins === '*' ? '*' : JSON.stringify(allowedOrigins);
   console.log(
-    `MLN111 game server http://localhost:${PORT} [${SERVER_BUILD}] — ${TIMELINE_QUESTIONS.length} câu timeline/phòng`
+    `MLN111 game server :${PORT} [${SERVER_BUILD}] — ${TIMELINE_QUESTIONS.length} câu | CORS: ${originLog}`
   );
 });

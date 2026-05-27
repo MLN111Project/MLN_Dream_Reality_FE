@@ -35,9 +35,11 @@ export default function AdminCreate() {
       navigate(`/admin/room/${res.state.code}`);
     } else {
       setError(
-        res?.error === 'SOCKET_TIMEOUT'
-          ? t('play.serverOffline')
-          : res?.error || t('play.joinError')
+        res?.error === 'SOCKET_URL_MISSING'
+          ? t('play.socketUrlMissing')
+          : res?.error === 'SOCKET_TIMEOUT' || res?.error === 'SOCKET_CONNECT_FAILED'
+            ? t('play.serverOffline')
+            : res?.error || t('play.joinError')
       );
     }
   };

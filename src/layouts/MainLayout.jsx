@@ -1,17 +1,14 @@
 import { Outlet, useLocation } from 'react-router-dom';
 import AnimatedBackground from '../components/AnimatedBackground';
-import Particles from '../components/Particles';
-import LanguageSwitcher from '../components/LanguageSwitcher';
 
 export default function MainLayout({ bgVariant = 'default' }) {
   const { pathname } = useLocation();
   const hideChrome = pathname === '/transition';
+  const bgVariantResolved = pathname === '/' ? 'home' : bgVariant;
 
   return (
     <>
-      <AnimatedBackground variant={bgVariant} />
-      {!hideChrome && <Particles />}
-      {!hideChrome && <LanguageSwitcher />}
+      <AnimatedBackground variant={bgVariantResolved} />
       <Outlet />
     </>
   );

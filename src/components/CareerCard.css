@@ -53,6 +53,26 @@
   line-height: 1.4;
 }
 
+.career-card--locked {
+  opacity: 0.55;
+  cursor: not-allowed;
+  filter: grayscale(0.35);
+}
+
+.career-card__badge {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  padding: 0.2rem 0.5rem;
+  border-radius: 6px;
+  background: rgba(100, 116, 139, 0.2);
+  color: var(--text-muted);
+  z-index: 1;
+}
+
 .career-card__check {
   position: absolute;
   top: 12px;

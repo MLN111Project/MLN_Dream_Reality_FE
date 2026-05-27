@@ -1,42 +1,49 @@
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import { BrowserRouter } from 'react-router-dom';
 import { ConfigProvider, theme } from 'antd';
 import viVN from 'antd/locale/vi_VN';
-import enUS from 'antd/locale/en_US';
-import { AnimatePresence } from 'framer-motion';
-import { LanguageProvider, useLanguage } from './context/LanguageContext';
+import { AnimatePresence, motion } from 'framer-motion';
+import { LanguageProvider } from './context/LanguageContext';
 import { SimulationProvider } from './context/SimulationContext';
 import LoadingScreen from './components/LoadingScreen';
 import AppRoutes from './routes/AppRoutes';
 
-const darkTheme = {
-  algorithm: theme.darkAlgorithm,
+const appTheme = {
+  algorithm: theme.defaultAlgorithm,
   token: {
-    colorPrimary: '#8b5cf6',
-    colorBgContainer: 'rgba(20, 20, 40, 0.8)',
-    colorBgElevated: 'rgba(15, 15, 30, 0.95)',
-    colorText: '#f8fafc',
-    colorTextSecondary: 'rgba(248, 250, 252, 0.7)',
+    colorPrimary: '#2563eb',
+    colorBgContainer: '#ffffff',
+    colorBgElevated: '#ffffff',
+    colorText: '#1e293b',
+    colorTextSecondary: '#475569',
     borderRadius: 12,
-    fontFamily: "'Segoe UI', system-ui, -apple-system, sans-serif",
+    fontFamily: "'Times New Roman', Times, Georgia, serif",
   },
 };
 
 function AppContent() {
   const [showLoading, setShowLoading] = useState(true);
-  const { lang } = useLanguage();
-  const antLocale = lang === 'vi' ? viVN : enUS;
+  const finishLoading = useCallback(() => setShowLoading(false), []);
 
   return (
-    <ConfigProvider theme={darkTheme} locale={antLocale}>
+    <ConfigProvider theme={appTheme} locale={viVN}>
       <SimulationProvider>
         <BrowserRouter>
-          <AnimatePresence>
-            {showLoading && (
-              <LoadingScreen onFinish={() => setShowLoading(false)} />
+          <AnimatePresence mode="wait">
+            {showLoading ? (
+              <LoadingScreen key="loading" onFinish={finishLoading} />
+            ) : (
+              <motion.div
+                key="app"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.4 }}
+                style={{ minHeight: '100vh' }}
+              >
+                <AppRoutes />
+              </motion.div>
             )}
           </AnimatePresence>
-          {!showLoading && <AppRoutes />}
         </BrowserRouter>
       </SimulationProvider>
     </ConfigProvider>

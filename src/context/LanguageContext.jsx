@@ -1,27 +1,10 @@
-import { createContext, useContext, useState, useCallback, useMemo, useEffect } from 'react';
-import en from '../i18n/locales/en';
+import { createContext, useContext, useCallback, useMemo, useEffect } from 'react';
 import vi from '../i18n/locales/vi';
-
-const locales = { en, vi };
-const STORAGE_KEY = 'dream-reality-lang';
 
 const LanguageContext = createContext(null);
 
-function detectDefaultLang() {
-  const saved = localStorage.getItem(STORAGE_KEY);
-  if (saved === 'en' || saved === 'vi') return saved;
-  return navigator.language?.toLowerCase().startsWith('vi') ? 'vi' : 'en';
-}
-
 export function LanguageProvider({ children }) {
-  const [lang, setLangState] = useState(detectDefaultLang);
-
-  const setLang = useCallback((next) => {
-    setLangState(next);
-    localStorage.setItem(STORAGE_KEY, next);
-  }, []);
-
-  const locale = useMemo(() => locales[lang] || locales.en, [lang]);
+  const locale = vi;
 
   const t = useCallback(
     (key, vars) => {
@@ -42,17 +25,11 @@ export function LanguageProvider({ children }) {
   );
 
   useEffect(() => {
-    document.documentElement.lang = lang;
-    document.title =
-      lang === 'vi'
-        ? 'Mô phỏng Giấc mơ vs Thực tế'
-        : 'Dream vs Reality Simulator';
-  }, [lang]);
+    document.documentElement.lang = 'vi';
+    document.title = 'MLN 111 Nhóm 3 · Giấc mơ vs Thực tế';
+  }, []);
 
-  const value = useMemo(
-    () => ({ lang, setLang, t, locale }),
-    [lang, setLang, t, locale]
-  );
+  const value = useMemo(() => ({ lang: 'vi', t, locale }), [t, locale]);
 
   return (
     <LanguageContext.Provider value={value}>

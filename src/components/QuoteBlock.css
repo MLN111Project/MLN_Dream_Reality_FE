@@ -24,8 +24,9 @@
 .quote-block__text {
   font-size: clamp(1.2rem, 3vw, 1.75rem);
   font-style: italic;
-  color: var(--text-secondary);
+  color: #334155;
   line-height: 1.6;
+  font-weight: 500;
 }
 
 .quote-block__author {

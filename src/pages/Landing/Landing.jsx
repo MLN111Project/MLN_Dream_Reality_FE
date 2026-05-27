@@ -14,7 +14,7 @@ import './Landing.css';
 
 export default function Landing() {
   const navigate = useNavigate();
-  const { t, lang } = useLanguage();
+  const { t } = useLanguage();
 
   const storyCards = useMemo(
     () => [
@@ -22,12 +22,16 @@ export default function Landing() {
       { id: 'card2', title: t('landing.card2Title'), desc: t('landing.card2Desc') },
       { id: 'card3', title: t('landing.card3Title'), desc: t('landing.card3Desc') },
     ],
-    [t, lang]
+    [t]
   );
 
   const handleStart = () => {
     playSound('click');
     navigate('/dream');
+  };
+
+  const handleHome = () => {
+    navigate('/');
   };
 
   return (
@@ -61,7 +65,7 @@ export default function Landing() {
           animate={{ opacity: 1 }}
           transition={{ delay: 0.9 }}
         >
-          <Typewriter key={lang} text={t('landing.hook')} speed={50} />
+          <Typewriter text={t('landing.hook')} speed={50} />
         </motion.p>
 
         <IntroVideo />
@@ -111,7 +115,7 @@ export default function Landing() {
       <section className="landing__story">
         <QuoteBlock quote={t('landing.quote')} />
         <motion.div
-          key={`landing-cards-${lang}`}
+          key="landing-cards"
           className="landing__cards"
           initial="hidden"
           animate="visible"

@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useSimulation } from '../context/SimulationContext';
 import { useLanguage } from '../context/LanguageContext';
-import LanguageSwitcher from './LanguageSwitcher';
+import bgMain from '../assets/background_mln111_g3.png';
 import './LoadingScreen.css';
 
 export default function LoadingScreen({ onFinish }) {
@@ -10,12 +10,14 @@ export default function LoadingScreen({ onFinish }) {
   const { t } = useLanguage();
 
   useEffect(() => {
-    const timer = setTimeout(() => {
+    const timer = window.setTimeout(() => {
       setLoading(false);
       onFinish?.();
-    }, 2800);
-    return () => clearTimeout(timer);
-  }, [setLoading, onFinish]);
+    }, 2200);
+    return () => window.clearTimeout(timer);
+    // onFinish is stabilized in App.jsx via useCallback
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [setLoading]);
 
   return (
     <motion.div
@@ -23,7 +25,10 @@ export default function LoadingScreen({ onFinish }) {
       exit={{ opacity: 0 }}
       transition={{ duration: 0.8 }}
     >
-      <LanguageSwitcher />
+      <div
+        className="loading-bg-image"
+        style={{ backgroundImage: `url(${bgMain})` }}
+      />
       <div className="loading-bg-gradient" />
       <motion.div
         className="loading-logo"

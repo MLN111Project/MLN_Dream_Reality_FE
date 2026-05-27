@@ -8,7 +8,10 @@
   max-height: 100dvh;
   height: 100dvh;
   overflow: hidden;
-  padding: clamp(0.75rem, 2vh, 1.25rem) clamp(1rem, 3vw, 2rem);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: clamp(4.5rem, 10vh, 7rem) clamp(1rem, 3vw, 2rem) clamp(2rem, 6vh, 4rem);
   box-sizing: border-box;
   z-index: 1;
 }
@@ -46,9 +49,20 @@
   z-index: 1;
   display: grid;
   grid-template-rows: auto minmax(0, 1fr) auto;
-  height: 100%;
+  height: auto;
   min-height: 0;
   gap: clamp(0.5rem, 1.5vh, 1rem);
+}
+
+.work-env__frame {
+  position: relative;
+  z-index: 2;
+  width: min(1120px, 100%);
+  padding: 1.25rem 1.25rem 1.1rem;
+  border: 1px solid rgba(59, 91, 140, 0.2) !important;
+  border-radius: var(--radius-lg);
+  background: rgba(255, 255, 255, 0.965) !important;
+  box-shadow: 0 18px 60px rgba(15, 23, 42, 0.14);
 }
 
 /* Header */
@@ -199,9 +213,16 @@
     overflow-y: auto;
   }
 
+  .work-env__frame {
+    width: 100%;
+    max-height: none;
+    overflow: visible;
+    padding: 1rem;
+  }
+
   .work-env__shell {
     height: auto;
-    min-height: calc(100dvh - 2rem);
+    min-height: 0;
   }
 
   .work-env__grid {

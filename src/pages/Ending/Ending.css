@@ -2,8 +2,28 @@
   position: relative;
   z-index: 1;
   text-align: center;
-  padding-bottom: 4rem;
-  overflow: hidden;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: clamp(4.5rem, 10vh, 7rem) clamp(1rem, 3vw, 2rem) clamp(2.5rem, 6vh, 4rem);
+  box-sizing: border-box;
+  overflow-x: hidden;
+}
+
+.ending-page__frame {
+  width: min(1100px, 100%);
+  padding: 1.5rem 1.35rem 1.75rem;
+  background: rgba(255, 255, 255, 0.97) !important;
+  border: 1px solid rgba(59, 91, 140, 0.2) !important;
+  box-shadow: 0 20px 64px rgba(15, 23, 42, 0.16);
+  text-align: center;
+}
+
+.ending-page__frame .glass-card {
+  background: rgba(248, 250, 252, 0.98) !important;
+  border: 1px solid rgba(59, 91, 140, 0.12) !important;
+  box-shadow: none;
 }
 
 .ending-page__glow {
@@ -16,13 +36,13 @@
   border-radius: 50%;
   filter: blur(100px);
   pointer-events: none;
-  z-index: -1;
+  z-index: 0;
 }
 
 .ending-page__title {
-  font-size: clamp(2.5rem, 7vw, 4rem);
+  font-size: clamp(2rem, 6vw, 3.25rem);
   margin: 1rem 0 0.5rem;
-  text-shadow: 0 0 60px currentColor;
+  text-shadow: 0 2px 12px rgba(15, 23, 42, 0.12);
 }
 
 .ending-page__secret-badge {
@@ -33,16 +53,17 @@
   font-size: 0.75rem;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  background: linear-gradient(135deg, rgba(139, 92, 246, 0.35), rgba(236, 72, 153, 0.25));
-  border: 1px solid rgba(139, 92, 246, 0.5);
-  color: #e9d5ff;
+  background: linear-gradient(135deg, rgba(139, 92, 246, 0.2), rgba(236, 72, 153, 0.15));
+  border: 1px solid rgba(139, 92, 246, 0.45);
+  color: #6d28d9;
+  font-weight: 600;
 }
 
 .ending-page__subtitle {
-  font-size: 1.25rem;
+  font-size: 1.15rem;
   color: var(--text-secondary);
   font-style: italic;
-  margin-bottom: 2.5rem;
+  margin-bottom: 2rem;
 }
 
 .ending-page__personalized {
@@ -50,7 +71,7 @@
   padding: 1rem 1.25rem;
   border-radius: 12px;
   background: rgba(139, 92, 246, 0.08);
-  border-left: 3px solid #8b5cf6;
+  border-left: 4px solid #8b5cf6;
 }
 
 .ending-page__personalized h3 {
@@ -59,6 +80,7 @@
   letter-spacing: 0.1em;
   color: var(--text-muted);
   margin-bottom: 0.5rem;
+  font-weight: 600;
 }
 
 .ending-page__personalized p {
@@ -69,8 +91,8 @@
 }
 
 .ending-page__chart-section {
-  max-width: 1100px;
-  margin: 0 auto 2rem;
+  max-width: 100%;
+  margin: 0 auto 1.5rem;
 }
 
 .ending-page__chart-section .live-stats-chart {
@@ -80,9 +102,9 @@
 .ending-page__extras {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 1.5rem;
-  max-width: 1100px;
-  margin: 0 auto 2rem;
+  gap: 1.25rem;
+  max-width: 100%;
+  margin: 0 auto 1.5rem;
   text-align: left;
 }
 
@@ -95,9 +117,9 @@
 .ending-page__content {
   display: grid;
   grid-template-columns: 1.2fr 1fr;
-  gap: 1.5rem;
-  max-width: 1100px;
-  margin: 0 auto 2rem;
+  gap: 1.25rem;
+  max-width: 100%;
+  margin: 0 auto 1.5rem;
   text-align: left;
 }
 
@@ -108,24 +130,25 @@
 }
 
 .ending-page__main {
-  padding: 2.5rem;
+  padding: 1.75rem;
 }
 
 .ending-page__description {
   color: var(--text-secondary);
   line-height: 1.8;
-  margin-top: 1.5rem;
+  margin-top: 1.25rem;
   font-size: 1rem;
 }
 
 .ending-page__journey {
-  margin-top: 1.5rem;
-  padding-top: 1.5rem;
-  border-top: 1px solid var(--glass-border);
+  margin-top: 1.25rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid rgba(59, 91, 140, 0.12);
+  color: var(--text-secondary);
 }
 
 .ending-page__stats {
-  padding: 2rem;
+  padding: 1.75rem;
 }
 
 .ending-page__stats h3 {
@@ -135,58 +158,113 @@
   color: var(--text-muted);
   margin-bottom: 1rem;
   text-align: center;
+  font-weight: 600;
 }
 
 .ending-page__radial {
   margin-bottom: 1rem;
 }
 
+/* Footer: Marxist theory + actions + final quote */
+.ending-page__footer-block {
+  margin-top: 1.5rem;
+  padding-top: 1.25rem;
+  border-top: 2px solid rgba(59, 91, 140, 0.12);
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  align-items: center;
+}
+
 .ending-page__theory {
-  max-width: 800px;
-  margin: 0 auto 2.5rem;
-  padding: 2rem;
+  width: 100%;
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 1.35rem 1.5rem;
   text-align: left;
+  background: linear-gradient(135deg, rgba(37, 99, 235, 0.08), rgba(139, 92, 246, 0.06));
+  border: 1px solid rgba(37, 99, 235, 0.22);
+  border-left: 4px solid #2563eb;
+  border-radius: 14px;
 }
 
 .ending-page__theory h3 {
-  font-size: 1rem;
-  margin-bottom: 1rem;
-  background: var(--accent-gradient);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  font-size: 1.05rem;
+  margin-bottom: 0.75rem;
+  font-weight: 700;
+  color: #1e40af;
 }
 
 .ending-page__theory p {
-  color: var(--text-secondary);
-  line-height: 1.8;
+  color: #1e293b;
+  line-height: 1.75;
+  font-size: 0.98rem;
+  margin: 0;
 }
 
 .ending-page__theory strong {
-  color: var(--text-primary);
+  color: #0f172a;
+  font-weight: 700;
 }
 
 .ending-page__actions {
   display: flex;
-  flex-direction: column;
+  flex-wrap: wrap;
   align-items: center;
-  gap: 1rem;
+  justify-content: center;
+  gap: 0.85rem;
+  width: 100%;
 }
 
 .ending-page__home-btn {
-  color: var(--text-muted) !important;
+  color: #1e293b !important;
+  font-weight: 600 !important;
+  background: #f1f5f9 !important;
+  border: 1px solid rgba(59, 91, 140, 0.2) !important;
+  border-radius: 999px !important;
+  height: 52px !important;
+  padding: 0 1.75rem !important;
 }
 
 .ending-page__home-btn:hover {
-  color: var(--text-primary) !important;
+  color: #2563eb !important;
+  border-color: #2563eb !important;
+  background: #eff6ff !important;
 }
 
 .ending-page__final-quote {
-  margin-top: 3rem;
-  font-size: clamp(1rem, 2.5vw, 1.25rem);
+  width: 100%;
+  max-width: 720px;
+  margin: 0;
+  padding: 1.25rem 1.5rem;
+  font-size: clamp(1.05rem, 2.5vw, 1.35rem);
   font-style: italic;
-  color: var(--text-muted);
-  max-width: 600px;
-  margin-left: auto;
-  margin-right: auto;
+  font-weight: 600;
+  line-height: 1.55;
+  color: #0f172a;
+  background: rgba(255, 255, 255, 0.98);
+  border: 2px solid rgba(37, 99, 235, 0.25);
+  border-radius: 14px;
+  box-shadow: 0 8px 28px rgba(15, 23, 42, 0.1);
+  text-shadow: none;
+}
+
+@media (max-width: 640px) {
+  .ending-page {
+    padding-top: 5rem;
+  }
+
+  .ending-page__frame {
+    padding: 1rem;
+  }
+
+  .ending-page__actions {
+    flex-direction: column;
+  }
+
+  .ending-page__actions .sim-btn-primary,
+  .ending-page__home-btn {
+    width: 100%;
+    max-width: 320px;
+  }
 }

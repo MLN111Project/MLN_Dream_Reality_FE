@@ -11,10 +11,10 @@ import { playSound } from '../utils/sounds';
 import './IntroVideo.css';
 
 export default function IntroVideo() {
-  const { lang, t } = useLanguage();
+  const { t } = useLanguage();
   const videoRef = useRef(null);
-  const videoSrc = getIntroVideo(lang);
-  const poster = getIntroImages(lang)[0];
+  const videoSrc = getIntroVideo();
+  const poster = getIntroImages()[0];
   const [muted, setMuted] = useState(true);
 
   useEffect(() => {
@@ -55,7 +55,7 @@ export default function IntroVideo() {
       <motion.div className="intro-video__frame glass-card">
         <AnimatePresence mode="wait">
           <motion.div
-            key={lang}
+            key="intro-video"
             className="intro-video__inner"
             initial={{ opacity: 0, scale: 0.98 }}
             animate={{ opacity: 1, scale: 1 }}

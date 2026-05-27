@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from 'antd';
 import { ReloadOutlined, HomeOutlined } from '@ant-design/icons';
@@ -15,6 +15,8 @@ import StatBar from '../../components/StatBar';
 import LiveStatsChart from '../../components/LiveStatsChart';
 import EnvironmentComparison from '../../components/EnvironmentComparison';
 import SocialStats from '../../components/SocialStats';
+import AiEndingInsight from '../../components/AiEndingInsight';
+import { buildAnalysisPayload, analyzeGameEnd } from '../../services/aiService';
 import { getEndings, getCareers, getEnvironments } from '../../i18n/localizedData';
 import { useSimulation } from '../../context/SimulationContext';
 import { useLanguage } from '../../context/LanguageContext';
@@ -26,17 +28,19 @@ const STAT_KEYS = ['passion', 'money', 'creativity', 'mentalHealth', 'socialReco
 
 export default function Ending() {
   const navigate = useNavigate();
-  const { lang, t } = useLanguage();
-  const { careerId, environmentId, stats, history, endingId, resetSimulation } =
+  const { t } = useLanguage();
+  const { careerId, environmentId, stats, history, endingId, flags, resetSimulation } =
     useSimulation();
+  const [aiStatus, setAiStatus] = useState('loading');
+  const [aiAnalysis, setAiAnalysis] = useState(null);
 
-  const endings = useMemo(() => getEndings(lang), [lang]);
+  const endings = useMemo(() => getEndings(), []);
   const ending = endings[endingId] || endings.creativeSurvivor;
   const career = useMemo(
-    () => getCareers(lang).find((c) => c.id === careerId),
-    [lang, careerId]
+    () => getCareers().find((c) => c.id === careerId),
+    [careerId]
   );
-  const environments = useMemo(() => getEnvironments(lang), [lang]);
+  const environments = useMemo(() => getEnvironments(), []);
   const environment = useMemo(
     () => environments.find((e) => e.id === environmentId),
     [environments, environmentId]
@@ -57,6 +61,44 @@ export default function Ending() {
       playSound('dramatic');
     }
   }, [careerId, environmentId, navigate]);
+
+  useEffect(() => {
+    if (!careerId || !environmentId || !endingId) return undefined;
+    let cancelled = false;
+    setAiStatus('loading');
+    setAiAnalysis(null);
+
+    const choices = history.slice(1).map((h) => ({
+      stageTitle: h.label,
+      questionTitle: h.label,
+      choiceLabel: h.label,
+    }));
+
+    const payload = buildAnalysisPayload({
+      careerId,
+      environmentId,
+      stats,
+      endingId,
+      flags,
+      history,
+      choices,
+    });
+
+    analyzeGameEnd(payload)
+      .then((analysis) => {
+        if (!cancelled) {
+          setAiAnalysis(analysis);
+          setAiStatus('ready');
+        }
+      })
+      .catch(() => {
+        if (!cancelled) setAiStatus('error');
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [careerId, environmentId, endingId, stats, flags, history]);
 
   const radialData = STAT_KEYS.map((key) => ({
     name: t(`stats.${key}`),
@@ -86,6 +128,7 @@ export default function Ending() {
         transition={{ duration: 1.5 }}
       />
 
+      <div className="ending-page__frame glass-card">
       <motion.span
         className="step-indicator"
         initial={{ opacity: 0 }}
@@ -123,6 +166,8 @@ export default function Ending() {
       >
         {ending.subtitle}
       </motion.p>
+
+      <AiEndingInsight status={aiStatus} analysis={aiAnalysis} />
 
       <motion.div
         className="ending-page__content"
@@ -209,53 +254,43 @@ export default function Ending() {
       </div>
 
       <motion.div
-        className="ending-page__theory glass-card"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
+        className="ending-page__footer-block"
+        initial={{ opacity: 0, y: 16 }}
+        animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 1.5 }}
       >
-        <h3>{t('ending.marxistTitle')}</h3>
-        <p>
-          <strong>{t('ending.forces')}</strong> {t('ending.marxistMid')}{' '}
-          <strong>{t('ending.relations')}</strong>
-          {t('ending.marxistEnd')}
-        </p>
-      </motion.div>
+        <div className="ending-page__theory">
+          <h3>{t('ending.marxistTitle')}</h3>
+          <p>
+            <strong>{t('ending.forces')}</strong> {t('ending.marxistMid')}{' '}
+            <strong>{t('ending.relations')}</strong>
+            {t('ending.marxistEnd')}
+          </p>
+        </div>
 
-      <motion.div
-        className="ending-page__actions"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 1.8 }}
-      >
-        <Button
-          type="primary"
-          size="large"
-          className="sim-btn-primary"
-          icon={<ReloadOutlined />}
-          onClick={handleRestart}
-        >
-          {t('ending.restart')}
-        </Button>
-        <Button
-          type="text"
-          size="large"
-          icon={<HomeOutlined />}
-          onClick={() => navigate('/')}
-          className="ending-page__home-btn"
-        >
-          {t('ending.home')}
-        </Button>
-      </motion.div>
+        <div className="ending-page__actions">
+          <Button
+            type="primary"
+            size="large"
+            className="sim-btn-primary"
+            icon={<ReloadOutlined />}
+            onClick={handleRestart}
+          >
+            {t('ending.restart')}
+          </Button>
+          <Button
+            size="large"
+            icon={<HomeOutlined />}
+            onClick={() => navigate('/')}
+            className="ending-page__home-btn"
+          >
+            {t('ending.home')}
+          </Button>
+        </div>
 
-      <motion.p
-        className="ending-page__final-quote"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 2.2 }}
-      >
-        &ldquo;{t('ending.finalQuote')}&rdquo;
-      </motion.p>
+        <p className="ending-page__final-quote">&ldquo;{t('ending.finalQuote')}&rdquo;</p>
+      </motion.div>
+      </div>
     </PageTransition>
   );
 }

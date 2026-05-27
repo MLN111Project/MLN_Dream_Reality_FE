@@ -5,8 +5,8 @@ import { getIntroImages } from '../utils/introMedia';
 import './IntroMarquee.css';
 
 export default function IntroMarquee() {
-  const { lang, t } = useLanguage();
-  const images = useMemo(() => getIntroImages(lang), [lang]);
+  const { t } = useLanguage();
+  const images = useMemo(() => getIntroImages(), []);
   const trackImages = useMemo(() => [...images, ...images], [images]);
 
   return (
@@ -25,7 +25,7 @@ export default function IntroMarquee() {
       <motion.div className="intro-marquee__viewport glass-card">
         <div className="intro-marquee__fade intro-marquee__fade--left" />
         <motion.div
-          key={lang}
+          key="intro-marquee"
           className="intro-marquee__track"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -33,7 +33,7 @@ export default function IntroMarquee() {
         >
           {trackImages.map((src, i) => (
             <motion.div
-              key={`${lang}-${i}`}
+              key={`intro-img-${i}`}
               className="intro-marquee__slide"
               whileHover={{ scale: 1.03, y: -4 }}
               transition={{ type: 'spring', stiffness: 300 }}

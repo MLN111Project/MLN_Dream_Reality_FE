@@ -2,26 +2,21 @@ import { careers } from '../data/careers';
 import { environments } from '../data/environments';
 import { timelineStages, timelineEvents } from '../data/timeline';
 import { endings as endingsMeta } from '../data/endings';
-import en from './locales/en';
 import vi from './locales/vi';
 
-const locales = { en, vi };
+const loc = vi;
 
-function L(lang) {
-  return locales[lang] || locales.en;
-}
-
-export function getCareers(lang) {
-  const loc = L(lang);
+export function getCareers() {
   return careers.map((c) => ({
     ...c,
-    title: loc.careers[c.id].title,
-    tagline: loc.careers[c.id].tagline,
+    title: loc.careers[c.id]?.title ?? c.title,
+    tagline: loc.careers[c.id]?.tagline ?? c.tagline,
+    status: c.status,
+    comingSoonLabel: loc.common?.comingSoon,
   }));
 }
 
-export function getEnvironments(lang) {
-  const loc = L(lang);
+export function getEnvironments() {
   return environments.map((e) => ({
     ...e,
     title: loc.environments[e.id].title,
@@ -29,8 +24,7 @@ export function getEnvironments(lang) {
   }));
 }
 
-export function getTimelineStages(lang) {
-  const loc = L(lang);
+export function getTimelineStages() {
   return timelineStages.map((s) => ({
     ...s,
     title: loc.stages[s.id].title,
@@ -38,8 +32,7 @@ export function getTimelineStages(lang) {
   }));
 }
 
-export function getTimelineEvents(lang) {
-  const loc = L(lang);
+export function getTimelineEvents() {
   const result = {};
   Object.entries(timelineEvents).forEach(([stageId, events]) => {
     result[stageId] = events.map((ev) => {
@@ -59,8 +52,7 @@ export function getTimelineEvents(lang) {
   return result;
 }
 
-export function getEndings(lang) {
-  const loc = L(lang);
+export function getEndings() {
   const result = {};
   Object.keys(endingsMeta).forEach((key) => {
     if (!loc.endings[key]) return;
@@ -75,6 +67,6 @@ export function getEndings(lang) {
   return result;
 }
 
-export function getEnvModifierLabels(lang) {
-  return L(lang).envModifiers;
+export function getEnvModifierLabels() {
+  return loc.envModifiers;
 }

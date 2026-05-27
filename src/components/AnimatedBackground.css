@@ -3,56 +3,45 @@
   inset: 0;
   z-index: -1;
   overflow: hidden;
-  background: var(--bg-primary);
+  background: #eef4fc;
 }
 
-.animated-bg__orb {
-  position: absolute;
-  border-radius: 50%;
-  filter: blur(80px);
-}
-
-.animated-bg__orb--1 {
-  width: 60vw;
-  height: 60vw;
-  max-width: 600px;
-  max-height: 600px;
-  top: -20%;
-  right: -10%;
-  background: radial-gradient(circle, rgba(139, 92, 246, 0.35) 0%, transparent 70%);
-  animation: float 12s ease-in-out infinite;
-}
-
-.animated-bg__orb--2 {
-  width: 50vw;
-  height: 50vw;
-  max-width: 500px;
-  max-height: 500px;
-  bottom: -15%;
-  left: -10%;
-  background: radial-gradient(circle, rgba(59, 130, 246, 0.3) 0%, transparent 70%);
-}
-
-.animated-bg--warning .animated-bg__orb--1 {
-  background: radial-gradient(circle, rgba(239, 68, 68, 0.3) 0%, transparent 70%);
-}
-
-.animated-bg--warning .animated-bg__orb--2 {
-  background: radial-gradient(circle, rgba(249, 115, 22, 0.25) 0%, transparent 70%);
-}
-
-.animated-bg--hope .animated-bg__orb--1 {
-  background: radial-gradient(circle, rgba(6, 182, 212, 0.35) 0%, transparent 70%);
-}
-
-.animated-bg__grid {
+.animated-bg__image {
   position: absolute;
   inset: 0;
-  background-image:
-    linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
-  background-size: 60px 60px;
-  mask-image: radial-gradient(ellipse at center, black 20%, transparent 75%);
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+}
+
+/* Trang chủ: hiện full ảnh (không cắt chữ trên), không phủ mờ */
+.animated-bg--home .animated-bg__image {
+  background-size: cover;
+  background-position: center top;
+}
+
+.animated-bg__overlay--warning {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 248, 245, 0.78) 0%,
+    rgba(254, 242, 235, 0.86) 50%,
+    rgba(255, 250, 248, 0.9) 100%
+  );
+}
+
+.animated-bg__overlay--hope {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    180deg,
+    rgba(245, 253, 255, 0.75) 0%,
+    rgba(236, 252, 255, 0.85) 50%,
+    rgba(244, 251, 255, 0.9) 100%
+  );
 }
 
 .animated-bg__shine {
@@ -60,6 +49,14 @@
   top: 0;
   left: 0;
   right: 0;
-  height: 200px;
-  background: linear-gradient(180deg, rgba(6, 182, 212, 0.15), transparent);
+  height: 180px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.5), transparent);
+  pointer-events: none;
+}
+
+@media (max-width: 768px) {
+  .animated-bg--home .animated-bg__image {
+    background-size: cover;
+    background-position: center top;
+  }
 }

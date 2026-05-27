@@ -1,0 +1,136 @@
+.ai-ending {
+  margin: 1.25rem 0;
+  padding: 1.35rem 1.5rem;
+  text-align: left;
+  border: 1px solid rgba(30, 64, 120, 0.22) !important;
+  background: #ffffff !important;
+  box-shadow: 0 8px 32px rgba(15, 23, 42, 0.1) !important;
+  backdrop-filter: none;
+}
+
+.ai-ending--muted {
+  background: #f8fafc !important;
+}
+
+.ai-ending__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem 1rem;
+  margin-bottom: 1rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.ai-ending__head-text {
+  flex: 1;
+  min-width: 12rem;
+}
+
+.ai-ending__icon-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 10px;
+  background: #eff6ff;
+  flex-shrink: 0;
+}
+
+.ai-ending__icon {
+  font-size: 1.35rem;
+  color: #1d4ed8;
+}
+
+.ai-ending__head h3 {
+  margin: 0;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #0f172a;
+  line-height: 1.35;
+}
+
+.ai-ending__sub {
+  margin: 0.35rem 0 0;
+  font-size: 0.9rem;
+  color: #475569;
+  line-height: 1.45;
+}
+
+.ai-ending__burnout-tag {
+  margin: 0 0 0 auto !important;
+  font-size: 0.85rem !important;
+  padding: 0.2rem 0.65rem !important;
+  font-weight: 600 !important;
+}
+
+.ai-ending__loading {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  color: #334155;
+  font-size: 0.95rem;
+}
+
+.ai-ending__burnout-line {
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: #9a3412;
+  margin: 0 0 1.1rem;
+  padding: 0.65rem 0.85rem;
+  background: #fff7ed;
+  border-left: 4px solid #ea580c;
+  border-radius: 0 8px 8px 0;
+  line-height: 1.5;
+}
+
+.ai-ending__grid {
+  display: grid;
+  gap: 0.85rem;
+}
+
+@media (min-width: 768px) {
+  .ai-ending__grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .ai-ending__theory-block {
+    grid-column: 1 / -1;
+  }
+}
+
+.ai-ending__grid section {
+  padding: 0.9rem 1rem;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+}
+
+.ai-ending__theory-block {
+  background: #f0f9ff !important;
+  border-color: #bae6fd !important;
+}
+
+.ai-ending__grid h4 {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #1e40af;
+  margin: 0 0 0.5rem;
+  font-weight: 700;
+}
+
+.ai-ending__grid p {
+  margin: 0;
+  line-height: 1.65;
+  font-size: 0.95rem;
+  color: #1e293b;
+}
+
+.ai-ending__hint {
+  margin: 0;
+  color: #475569;
+  font-size: 0.95rem;
+  line-height: 1.55;
+}

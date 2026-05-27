@@ -33,7 +33,7 @@ function countTotalEvents(stages, eventsMap) {
 
 export default function Timeline() {
   const navigate = useNavigate();
-  const { lang, t } = useLanguage();
+  const { t } = useLanguage();
   const {
     careerId,
     environmentId,
@@ -45,15 +45,15 @@ export default function Timeline() {
     applyChoice,
   } = useSimulation();
 
-  const timelineStages = useMemo(() => getTimelineStages(lang), [lang]);
-  const timelineEvents = useMemo(() => getTimelineEvents(lang), [lang]);
+  const timelineStages = useMemo(() => getTimelineStages(), []);
+  const timelineEvents = useMemo(() => getTimelineEvents(), []);
   const career = useMemo(
-    () => getCareers(lang).find((c) => c.id === careerId),
-    [lang, careerId]
+    () => getCareers().find((c) => c.id === careerId),
+    [careerId]
   );
   const environment = useMemo(
-    () => getEnvironments(lang).find((e) => e.id === environmentId),
-    [lang, environmentId]
+    () => getEnvironments().find((e) => e.id === environmentId),
+    [environmentId]
   );
 
   const [selectedChoice, setSelectedChoice] = useState(null);
@@ -96,7 +96,7 @@ export default function Timeline() {
 
   useEffect(() => {
     setSelectedChoice(null);
-  }, [stageIndex, eventIndex, lang]);
+  }, [stageIndex, eventIndex]);
 
   const advanceTimeline = () => {
     const nextEventIndex = eventIndex + 1;
@@ -134,39 +134,40 @@ export default function Timeline() {
   return (
     <StatsMoodLayer stats={stats}>
       <PageTransition className="timeline-page page-container">
-        <header className="timeline-page__header">
-          <motion.div
-            className="timeline-page__top"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-          >
-            <Button
-              type="text"
-              icon={<ArrowLeftOutlined />}
-              onClick={() => navigate('/environment')}
-              className="back-btn"
+        <div className="timeline-page__frame glass-card">
+          <header className="timeline-page__header">
+            <motion.div
+              className="timeline-page__top"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
             >
-              {t('common.back')}
-            </Button>
-            <span className="step-indicator">{t('common.stepTimeline')}</span>
-          </motion.div>
+              <Button
+                type="text"
+                icon={<ArrowLeftOutlined />}
+                onClick={() => navigate('/environment')}
+                className="back-btn"
+              >
+                {t('common.back')}
+              </Button>
+              <span className="step-indicator">{t('common.stepTimeline')}</span>
+            </motion.div>
 
-          <motion.div
-            className="timeline-page__intro"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-          >
-            <h1 className="timeline-page__title">
-              {t('timeline.lifeAs')}{' '}
-              <span className="gradient-text">{career.title}</span>
-            </h1>
-            <p className="timeline-page__env">
-              {t('timeline.at')} {environment.title}
-            </p>
-          </motion.div>
-        </header>
+            <motion.div
+              className="timeline-page__intro"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+            >
+              <h1 className="timeline-page__title">
+                {t('timeline.lifeAs')}{' '}
+                <span className="gradient-text">{career.title}</span>
+              </h1>
+              <p className="timeline-page__env">
+                {t('timeline.at')} {environment.title}
+              </p>
+            </motion.div>
+          </header>
 
-        <div className="timeline-page__main">
+          <div className="timeline-page__main">
           <aside className="timeline-page__process glass-card">
             <div className="timeline-page__journey">
               <div className="timeline-page__journey-head">
@@ -184,7 +185,7 @@ export default function Timeline() {
                 percent={journeyPercent}
                 showInfo={false}
                 strokeColor={{ from: '#8b5cf6', to: '#06b6d4' }}
-                trailColor="rgba(255,255,255,0.08)"
+                trailColor="rgba(15, 23, 42, 0.1)"
                 size="small"
               />
             </div>
@@ -239,6 +240,7 @@ export default function Timeline() {
                 isLastQuestion={isLastQuestion}
               />
             )}
+          </div>
           </div>
         </div>
       </PageTransition>

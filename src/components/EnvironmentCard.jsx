@@ -1,6 +1,5 @@
 ﻿import { motion } from 'framer-motion';
 import { CheckOutlined } from '@ant-design/icons';
-import { useLanguage } from '../context/LanguageContext';
 import { getEnvModifierLabels } from '../i18n/localizedData';
 import './EnvironmentCard.css';
 
@@ -13,8 +12,7 @@ const MOD_KEYS = [
 ];
 
 export default function EnvironmentCard({ env, selected, onSelect, index }) {
-  const { lang } = useLanguage();
-  const modifierLabels = getEnvModifierLabels(lang);
+  const modifierLabels = getEnvModifierLabels();
   const Icon = env.icon;
 
   return (

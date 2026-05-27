@@ -32,7 +32,9 @@ export default function PlayerJoin() {
       sessionStorage.setItem('roomCode', res.state.code);
       navigate(`/play/room/${res.state.code}`);
     } else {
-      if (res?.error === 'SOCKET_TIMEOUT' || res?.error === 'SOCKET_CONNECT_FAILED') {
+      if (res?.error === 'SOCKET_URL_MISSING') {
+        setError(t('play.socketUrlMissing'));
+      } else if (res?.error === 'SOCKET_TIMEOUT' || res?.error === 'SOCKET_CONNECT_FAILED') {
         setError(t('play.serverOffline'));
       } else if (res?.error === 'ROOM_NOT_FOUND') {
         setError(t('play.roomNotFound'));

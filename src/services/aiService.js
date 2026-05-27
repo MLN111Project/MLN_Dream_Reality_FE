@@ -168,9 +168,15 @@ export async function analyzeGameEnd(payload) {
   return callGemini(payload);
 }
 
-/** Client: proxy qua game server. */
+function getApiBaseUrl() {
+  const base = import.meta.env.VITE_SOCKET_URL || import.meta.env.VITE_API_URL || '';
+  return String(base).replace(/\/$/, '');
+}
+
+/** Client: gọi game server (dev: Vite proxy /api). */
 export async function requestEndingAnalysis(payload) {
-  const res = await fetch('/api/ai/analyze', {
+  const apiBase = getApiBaseUrl();
+  const res = await fetch(`${apiBase}/api/ai/analyze`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(payload),

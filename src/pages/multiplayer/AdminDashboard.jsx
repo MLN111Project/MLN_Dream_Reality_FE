@@ -1,6 +1,7 @@
 import { useEffect, useState, useMemo, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Button, Table, Switch, Progress, Tag, Alert } from 'antd';
+import { ArrowLeftOutlined } from '@ant-design/icons';
 import PageTransition from '../../components/PageTransition';
 import TeamEndingPanel from '../../components/TeamEndingPanel';
 import { getCareers, getEnvironments, getEndings } from '../../i18n/localizedData';
@@ -82,6 +83,11 @@ export default function AdminDashboard() {
     emitAsync('admin:music', { on });
   };
 
+  const handleBackToCareerSelect = () => {
+    sessionStorage.removeItem('adminRoom');
+    navigate('/admin/create');
+  };
+
   const q = state.question;
   const maxTeams = state.maxTeams || 8;
   const timeLeft = state.questionEndsAt
@@ -151,6 +157,19 @@ export default function AdminDashboard() {
             message={t('admin.serverOldQuizTitle')}
             description={t('admin.serverOldQuiz')}
           />
+        )}
+
+        {state.phase === 'lobby' && (
+          <div className="multi-panel__topbar">
+            <Button
+              type="text"
+              icon={<ArrowLeftOutlined />}
+              onClick={handleBackToCareerSelect}
+              className="multi-back-btn"
+            >
+              {t('admin.backToCareerSelect')}
+            </Button>
+          </div>
         )}
 
         <div className="multi-admin-header">

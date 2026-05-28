@@ -289,9 +289,14 @@
   margin-bottom: 1.25rem;
 }
 
+.multi-create-careers .ant-col {
+  display: flex;
+}
+
 .multi-create-careers .career-card {
   width: 100%;
-  min-height: 140px;
+  min-height: 168px;
+  height: 100%;
 }
 
 .multi-create-submit {

@@ -15,7 +15,7 @@ export default function CareerCard({ career, selected, onSelect, index }) {
   return (
     <motion.button
       type="button"
-      className={`career-card glass-card ${selected ? 'career-card--selected' : ''} ${isLocked ? 'career-card--locked' : ''}`}
+      className={`career-card glass-card ${selected ? 'career-card--selected' : ''} ${isLocked ? 'career-card--locked' : ''}${career.id === 'designer' ? ' career-card--designer' : ''}`}
       onClick={handleClick}
       disabled={isLocked}
       initial={{ opacity: 0, y: 30 }}
@@ -28,14 +28,24 @@ export default function CareerCard({ career, selected, onSelect, index }) {
       {isLocked && (
         <span className="career-card__badge">{t('common.comingSoon')}</span>
       )}
-      <motion.div
-        className="career-card__icon-wrap"
-        whileHover={isLocked ? {} : { rotate: [0, -5, 5, 0] }}
-        transition={{ duration: 0.4 }}
+      {career.image ? (
+        <div className="career-card__image-wrap">
+          <img src={career.image} alt={career.title} className="career-card__image" />
+        </div>
+      ) : (
+        <motion.div
+          className="career-card__icon-wrap"
+          whileHover={isLocked ? {} : { rotate: [0, -5, 5, 0] }}
+          transition={{ duration: 0.4 }}
+        >
+          <Icon size={32} style={{ color: career.color }} />
+        </motion.div>
+      )}
+      <h3
+        className={`career-card__title${career.id === 'designer' ? ' career-card__title--compact' : ''}`}
       >
-        <Icon size={32} style={{ color: career.color }} />
-      </motion.div>
-      <h3 className="career-card__title">{career.title}</h3>
+        {career.title}
+      </h3>
       <p className="career-card__tagline">{career.tagline}</p>
       {selected && !isLocked && (
         <motion.span

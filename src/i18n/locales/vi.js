@@ -47,6 +47,7 @@ export default {
       "Chọn ngành nghề cho cả phòng. Mỗi đội tự chọn môi trường làm việc và trả lời 12 câu.",
     careerLabel: "Ngành nghề (cả phòng)",
     createRoom: "Tạo mã phòng",
+    backToCareerSelect: "Chọn lại ngành nghề",
     serverOldQuizTitle: "Máy chủ đang chạy phiên bản cũ (3 câu quiz)",
     serverOldQuiz:
       "Dừng terminal server cũ (Ctrl+C), rồi chạy lại: npm run dev:all. Terminal phải hiện «12 câu timeline/phòng». Tạo phòng mới sau khi restart.",

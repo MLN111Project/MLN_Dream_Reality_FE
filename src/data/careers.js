@@ -5,10 +5,15 @@ import {
   FaCode,
   FaPenNib,
   FaLanguage,
-  FaVideo,
   FaRocket,
-  FaHandsHelping,
 } from 'react-icons/fa';
+import itImage from '../assets/it.png';
+import mediaDesignImage from '../assets/media_design.png';
+import teacherImage from '../assets/teacher.png';
+import directorImage from '../assets/director.png';
+import artImage from '../assets/art.png';
+import languageImage from '../assets/language.png';
+import businessImage from '../assets/business.png';
 
 export const careers = [
   {
@@ -18,6 +23,7 @@ export const careers = [
     icon: FaCode,
     color: '#0891b2',
     status: 'active',
+    image: itImage,
     baseStats: { passion: 88, creativity: 85, money: 45 },
   },
   {
@@ -27,6 +33,7 @@ export const careers = [
     icon: FaPenNib,
     color: '#2563eb',
     status: 'active',
+    image: mediaDesignImage,
     baseStats: { passion: 85, creativity: 90, money: 50 },
   },
   {
@@ -36,6 +43,7 @@ export const careers = [
     icon: FaChalkboardTeacher,
     color: '#6d4fc7',
     status: 'active',
+    image: teacherImage,
     baseStats: { passion: 90, creativity: 75, money: 40 },
   },
   {
@@ -45,6 +53,7 @@ export const careers = [
     icon: FaFilm,
     color: '#db2777',
     status: 'active',
+    image: directorImage,
     baseStats: { passion: 95, creativity: 92, money: 35 },
   },
   {
@@ -54,6 +63,7 @@ export const careers = [
     icon: FaPalette,
     color: '#ea580c',
     status: 'active',
+    image: artImage,
     baseStats: { passion: 98, creativity: 98, money: 25 },
   },
   {
@@ -63,6 +73,7 @@ export const careers = [
     icon: FaLanguage,
     color: '#059669',
     status: 'active',
+    image: languageImage,
     baseStats: { passion: 80, creativity: 70, money: 55 },
   },
   {
@@ -72,16 +83,8 @@ export const careers = [
     icon: FaRocket,
     color: '#7c3aed',
     status: 'active',
+    image: businessImage,
     baseStats: { passion: 96, creativity: 80, money: 30 },
-  },
-  {
-    id: 'ngo',
-    title: 'Non-profit',
-    tagline: 'Meaningful work, limited resources',
-    icon: FaHandsHelping,
-    color: '#10b981',
-    status: 'active',
-    baseStats: { passion: 92, creativity: 72, money: 28 },
   },
 ];
 
